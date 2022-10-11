@@ -1,13 +1,13 @@
 import Link from "next/link";
 import React, { useEffect } from "react";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLogin, setLogout } from "../redux/authSlice";
 
 const Header = () => {
   const [cookies] = useCookies(["accessToken", "userId"]);
   const dispatch = useDispatch();
-
+  const {auth} = useSelector((state) => state);
   useEffect(() => {
     if (cookies.accessToken) {
       dispatch(setLogin(cookies.accessToken));
@@ -37,14 +37,14 @@ const Header = () => {
             <a className="nav-link">Users</a>
           </Link>
         </li>
-        <li className="nav-item">
+        <li style={{display: !auth.isLoggedIn? "block":"none"}} className="nav-item">
           <Link href="/login">
             <a className="nav-link">Login</a>
           </Link>
         </li>
-        <li
+        
+        <li style={{display: auth.isLoggedIn? "block":"none", cursor: "pointer" }}
           className="nav-item"
-          style={{ cursor: "pointer" }}
           onClick={handleLogout}
         >
           <a className="nav-link">Logout</a>
